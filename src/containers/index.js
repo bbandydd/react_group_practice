@@ -109,6 +109,40 @@ export default class Main extends Component {
     this.setState({ group });
   }
 
+  handleSort = () => {
+    const data = this.state.group
+      .map(g => g.group)
+      .reduce((acc, group) => {
+        // 針對每個群組做排序，先從Y開始
+        const row = group.reduce((acc2, tv) => {
+          if (!acc2[tv.startY]) {
+            acc2[tv.startY] = [tv];
+          } else {
+            acc2[tv.startY].push(tv);
+          }
+
+          return acc2;
+        }, {});
+
+        // 再針對X排序
+        Object.keys(row).map((key) => {
+          row[key].sort((a, b) => a.startX > b.startX);
+        });
+
+        return [
+          ...acc,
+          {
+            row: Object.keys(row).length,
+            column: group.length / Object.keys(row).length,
+            data: Object.keys(row).reduce((result, key) => [...result, ...row[key]], [])
+          }
+        ];
+
+      }, []);
+
+      console.log(data);
+  }
+
   render() {
     return (
       <div>
@@ -117,6 +151,7 @@ export default class Main extends Component {
           { this.state.group.map((obj, index) => <Group data={obj} index={index} removeGroup={() => this.removeGroup(index)} />) }
         </Container>
         <Button onClick={this.handleGroup}>群組</Button>
+        <Button onClick={this.handleSort}>順序</Button>
       </div>
     );
   }

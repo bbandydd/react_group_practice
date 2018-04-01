@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const TV = ({
-  width, height, startX, startY, selectable, handleSelect
+  width, height, startX, startY, selectable, handleSelect, id
 }) => {
   const Container = styled.div`
     width: ${width}px;
@@ -14,7 +14,11 @@ const TV = ({
     background: ${selectable ? 'red' : 'white'};
   `;
 
-  return <Container onClick={handleSelect} />;
+  return (
+    <Container onClick={handleSelect}>
+      {id}
+    </Container>
+  );
 };
 
 export default TV;
